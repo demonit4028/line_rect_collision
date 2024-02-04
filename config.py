@@ -1,7 +1,7 @@
 import random
 
 WIDTH, HEIGHT = 500, 500
-SIZE = 10
+SIZE = 50
 W, H = WIDTH//SIZE, HEIGHT//SIZE
 
 BACKGROUNDCOLOR = '#303030'
@@ -59,7 +59,7 @@ class Collision:
 
 def create_random_pos(arr):
     while True:
-        x, y = random.randint(1, W-1), random.randint(1, H-1)
+        x, y = random.randint(1, WIDTH-1), random.randint(1, HEIGHT-1)
         collision = check_allow_pos(x, y, arr)
         if not collision.is_collision: return x, y
 
@@ -88,6 +88,7 @@ def mutate(arr):
 class Agent:
     def __init__(self, arr, brain=[], unmut=0):
         self.x, self.y = create_random_pos(arr)
+        self.cx, self.cy = self.x + SIZE//2, self.y + SIZE//2
         self.brain = brain if len(brain) > 0 else [random.randint(0, 24) for _ in range(BRAIN_SIZE)] #[24, 10, 37, 42, 57, 13, 24, 45, 17, 18, 37, 57, 55, 29, 36, 46, 12, 56, 37, 46, 12, 29, 7, 21, 41, 32, 19, 23, 20, 28, 38, 35, 20, 55, 63, 26, 49, 41, 44, 53, 50, 13, 42, 29, 0, 60, 35, 8, 35, 51, 17, 17, 17, 54, 20, 27, 55, 20, 44, 62, 44, 4, 30, 32]
         self.point = 0
         self.hp = 25
@@ -96,6 +97,8 @@ class Agent:
         self.direction = 0
 
     def update(self, objects, counter = 0):
+
+
         if counter >= 20:
             self.hp -= 2
             return
@@ -159,3 +162,6 @@ class Agent:
         else:
             self.point = (self.point + command) % BRAIN_SIZE
             self.update(objects, counter+1)
+    
+
+        self.cx, self.cy = self.x + SIZE//2, self.y + SIZE//2
